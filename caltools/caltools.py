@@ -30,7 +30,12 @@ def list_calibrators(ra, dec, surveys=["FIRST", "NVSS"], radius=2*units.deg):
         cat = query_heasarc(coord=coord, mission=survey, radius=radius)
         if cat is not None:
             cat = sort_by_separation(clean_heasarc(cat), coord=coord)
-            tables[survey] = cat
+            if 'FLUX_20_CM' in cat.columns:
+                cat.rename_column("FLUX_20_CM", "flux")
+                cols_keep = ['NAME', 'ra', 'dec', 'flux', 'separation']
+            else:
+                cols_keep = ['NAME', 'ra', 'dec', 'separation']
+            tables[survey] = cat[cols_keep]
 
     return tables
 
