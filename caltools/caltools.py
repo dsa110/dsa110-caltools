@@ -9,25 +9,37 @@ from io import open
 import numpy as np
 from astropy import coordinates, units
 from astroquery.heasarc import Heasarc
+import logging
+logging.basicConfig(format='%(asctime)s %(message)s')
 
 heasarc = Heasarc()
 
 
-def list_calibrators(ra, dec, surveys=["FIRST", "NVSS"], radius=2*units.deg):
+def is_field_calibratable(ra, dec):
+	""" Given a ra, dec, compare brightest source to total flux.
+	"""
+
+	table = list_calibrators(ra, dec)
+	fluxes = sorted(table['NVSS']['flux'])
+	print("Brightest source flux: {0}. Total flux {1}".format(max(fluxes), sum(fluxes)))
+
+
+def list_calibrators(ra, dec, surveys=["NVSS"], radius=2.):
     """ Search surveys for sources near (ra, dec)
     Args:
         ra, dec: float
           Coordinates in degrees
         surveys: list(str)
-          Survey strings used by HEASARC
-        radius: astropy.units
+          Survey strings used by HEASARC (e.g., FIRST, NVSS)
+        radius: float
+          Radius of aree to include in degrees
     """
     
     tables = {}
     coord = coordinates.SkyCoord(ra=ra, dec=dec, unit=(units.deg, units.deg))
 
     for survey in surveys:
-        cat = query_heasarc(coord=coord, mission=survey, radius=radius)
+        cat = query_heasarc(coord=coord, mission=survey, radius=radius*units.deg)
         if cat is not None:
             cat = sort_by_separation(clean_heasarc(cat), coord=coord)
             if 'FLUX_20_CM' in cat.columns:
@@ -40,7 +52,7 @@ def list_calibrators(ra, dec, surveys=["FIRST", "NVSS"], radius=2*units.deg):
     return tables
 
 
-def query_heasarc(coord=None, ra=None, dec=None, mission='FIRST', radius=2*units.deg):
+def query_heasarc(coord=None, ra=None, dec=None, mission='NVSS', radius=2*units.deg):
     """
     Use astroquery to query the HEARSARC database
 
@@ -63,7 +75,7 @@ def query_heasarc(coord=None, ra=None, dec=None, mission='FIRST', radius=2*units
     try:
         catalog = heasarc.query_region(coord, mission=mission, radius=radius)
     except (ValueError, TypeError):
-        logger.warn("No source found at {0}".format(coord))
+        logging.warn("No source found at {0}".format(coord))
 
     return catalog
 
