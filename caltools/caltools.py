@@ -15,6 +15,19 @@ logging.basicConfig(format='%(asctime)s %(message)s')
 heasarc = Heasarc()
 
 
+def get_calibrator_lists(ra, dec, fluxratio=0.7, survey='NVSS'):
+    """ Given ra,dec, define list of calibrator sources that includes fluxratio of the total flux in the field.
+    Returns array of tuples (ra, dec, flux) to be used as input to models.
+    """
+
+    table = list_calibrators(ra, dec, survey=[survey])[survey]
+    table.sort(keys='flux', reverse=True)
+    totalflux = table['flux'].sum()  # TODO: define as all flux but select on compact sources?
+    ind = np.where(np.cumsum(table['flux']) > fluxratio*totalflux)[0][0]
+
+    return np.array(table[:ind]['ra', 'dec', 'flux'])
+
+
 def is_field_calibratable(ra, dec):
 	""" Given a ra, dec, compare brightest source to total flux.
 	"""
@@ -49,6 +62,7 @@ def list_calibrators(ra, dec, surveys=["NVSS"], radius=2.):
                 cols_keep = ['NAME', 'ra', 'dec', 'separation']
             tables[survey] = cat[cols_keep]
 
+    # TODO: select based on size?
     return tables
 
 
