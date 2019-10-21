@@ -20,7 +20,7 @@ def get_calibrator_lists(ra, dec, fluxratio=0.7, survey='NVSS'):
     Returns array of tuples (ra, dec, flux) to be used as input to models.
     """
 
-    table = list_calibrators(ra, dec, survey=[survey])[survey]
+    table = list_calibrators(ra, dec, surveys=[survey])[survey]
     table.sort(keys='flux', reverse=True)
     totalflux = table['flux'].sum()  # TODO: define as all flux but select on compact sources?
     ind = np.where(np.cumsum(table['flux']) > fluxratio*totalflux)[0][0]
