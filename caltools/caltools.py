@@ -1,11 +1,6 @@
 # Functions heavily borrowed from rf_meta_query/catalog_utils.py by X Prochaska
 # claw, 19oct07
 
-from __future__ import print_function, division, absolute_import, unicode_literals
-from builtins import bytes, dict, object, range, map, input, str
-from future.utils import itervalues, viewitems, iteritems, listvalues, listitems
-from io import open
-
 import numpy as np
 from astropy import coordinates, units
 from astroquery.heasarc import Heasarc
