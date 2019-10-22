@@ -35,7 +35,7 @@ before_script:
   - git config --global user.name "Travis-CI"
 
 script: 
-  - coverage run --source rfpipe -m py.test
+  - coverage run --source dsa110-caltools -m py.test
 
 after_success:
   - coverage report
