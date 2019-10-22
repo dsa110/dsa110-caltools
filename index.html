@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>dsa110-caltools &#8212; dsa110-caltools 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="dsa110-caltools">
+<h1>dsa110-caltools<a class="headerlink" href="#dsa110-caltools" title="Permalink to this headline">¶</a></h1>
+<p>dsa110-caltools has a module to help find calibrators and create calibration models.</p>
+<span class="target" id="module-caltools.caltools"></span><dl class="function">
+<dt id="caltools.caltools.clean_heasarc">
+<code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">clean_heasarc</code><span class="sig-paren">(</span><em class="sig-param">catalog</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.clean_heasarc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renames columns</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="caltools.caltools.get_calibrator_lists">
+<code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">get_calibrator_lists</code><span class="sig-paren">(</span><em class="sig-param">ra</em>, <em class="sig-param">dec</em>, <em class="sig-param">fluxratio=0.7</em>, <em class="sig-param">survey='NVSS'</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.get_calibrator_lists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given ra,dec, define list of calibrator sources that includes fluxratio of the total flux in the field.
+Returns array of tuples (ra, dec, flux) to be used as input to models.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="caltools.caltools.is_field_calibratable">
+<code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">is_field_calibratable</code><span class="sig-paren">(</span><em class="sig-param">ra</em>, <em class="sig-param">dec</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.is_field_calibratable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a ra, dec, compare brightest source to total flux.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="caltools.caltools.list_calibrators">
+<code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">list_calibrators</code><span class="sig-paren">(</span><em class="sig-param">ra, dec, surveys=['NVSS'], radius=2.0</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.list_calibrators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search surveys for sources near (ra, dec)
+Args:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>ra, dec: float</dt><dd><p>Coordinates in degrees</p>
+</dd>
+<dt>surveys: list(str)</dt><dd><p>Survey strings used by HEASARC (e.g., FIRST, NVSS)</p>
+</dd>
+<dt>radius: float</dt><dd><p>Radius of aree to include in degrees</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="caltools.caltools.query_heasarc">
+<code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">query_heasarc</code><span class="sig-paren">(</span><em class="sig-param">coord=None</em>, <em class="sig-param">ra=None</em>, <em class="sig-param">dec=None</em>, <em class="sig-param">mission='NVSS'</em>, <em class="sig-param">radius=&lt;Quantity 2. deg&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.query_heasarc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use astroquery to query the HEARSARC database</p>
+<dl>
+<dt>Args:</dt><dd><p>ra, dec: float (degrees)
+coord: astropy.coordinates.sky_coordinate.SkyCoord
+mission: str</p>
+<blockquote>
+<div><p>Uses HEASARC notation</p>
+</div></blockquote>
+<p>radius: Angle</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="caltools.caltools.sort_by_separation">
+<code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">sort_by_separation</code><span class="sig-paren">(</span><em class="sig-param">catalog</em>, <em class="sig-param">coord</em>, <em class="sig-param">radec=('ra'</em>, <em class="sig-param">'dec')</em>, <em class="sig-param">add_sep=True</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.sort_by_separation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort an input catalog by separation from input coordinate</p>
+<dl>
+<dt>Args:</dt><dd><p>catalog: astropy.table.Table
+coord: SkyCoord
+radec: tuple</p>
+<blockquote>
+<div><p>Defines catalog columns holding RA, DEC (in deg)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>add_sep: bool, optional</dt><dd><p>Add a ‘separation’ column with units of arcmin</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>srt_catalog: astropy.table.Table</dt><dd><p>Sorted catalog</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+</ul>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">dsa110-caltools</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Casey Law.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
