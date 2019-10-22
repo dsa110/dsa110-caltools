@@ -43,4 +43,4 @@ after_success:
 
 notifications:
   email: false
-  slack: false
+  slack: dsax:5cvY93riIRq8OaS1qu3GPjyx
