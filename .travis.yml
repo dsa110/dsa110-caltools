@@ -1,0 +1,46 @@
+language: python
+
+python:
+   - 3.6
+
+dist: bionic
+
+branches:
+  only:
+    - master
+    - development
+
+install:
+  - sudo apt-get update -y
+  - sudo apt-get install -y wget
+
+  # set up conda
+  - wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda config --add channels conda-forge 
+  - conda config --set channel_priority strict
+
+  # install with conda and pip
+  - conda create -n conda pip
+  - source activate conda
+  - conda install -q python=$TRAVIS_PYTHON_VERSION numpy astropy pytest setuptools coverage astroquery
+  - python setup.py install
+
+before_script:
+  - git config --global user.email "caseyjlaw@gmail.com"
+  - git config --global user.name "Travis-CI"
+
+script: 
+  - coverage run --source rfpipe -m py.test
+
+after_success:
+  - coverage report
+  - codecov
+
+notifications:
+  email: false
+  slack: realfastvla:ID1qIFG70HGYf3G6Y3oWoFFk
