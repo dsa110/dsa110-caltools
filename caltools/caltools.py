@@ -62,7 +62,7 @@ def list_calibrators(ra, dec, surveys=["NVSS"], radius=2.):
                 cols_keep = ['NAME', 'ra', 'dec', 'separation']
             tables[survey] = cat[cols_keep]
 
-    # TODO: select based on size?
+    # TODO: select based on source size
     return tables
 
 
