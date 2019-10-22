@@ -8,15 +8,7 @@ dsa110-caltools
 
 dsa110-caltools has a module to help find calibrators and create calibration models.
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-
-
-Indices and tables
-==================
+.. automodule:: caltools.caltools
+   :members:
 
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
