@@ -9,30 +9,30 @@ logging.basicConfig(format='%(asctime)s %(message)s')
 
 heasarc = Heasarc()
 
+_beamradius_DSA = 2.
 
-def get_calibrator_lists(ra, dec, fluxratio=0.7, survey='NVSS'):
+
+def get_calibrator_lists(ra, dec, fluxratio=0.7, survey='NVSS', radius=_beamradius_DSA):
     """ Given ra,dec, define list of calibrator sources that includes fluxratio of the total flux in the field.
     Returns array of tuples (ra, dec, flux) to be used as input to models.
+    Can optionally define survey and radius for catalog query.
     """
 
-    table = list_calibrators(ra, dec, surveys=[survey])[survey]
+    table = list_calibrators(ra, dec, surveys=[survey], radius=radius)[survey]
+    if table is None:
+        return np.empty(0)
+
     table.sort(keys='flux', reverse=True)
     totalflux = table['flux'].sum()  # TODO: define as all flux but select on compact sources?
-    ind = np.where(np.cumsum(table['flux']) > fluxratio*totalflux)[0][0]
+    if fluxratio < 1:
+        ind = np.where(np.cumsum(table['flux']) > fluxratio*totalflux)[0][0] + 1
+    else:
+        ind = len(table)
 
     return np.array(table[:ind]['ra', 'dec', 'flux'])
 
 
-def is_field_calibratable(ra, dec):
-	""" Given a ra, dec, compare brightest source to total flux.
-	"""
-
-	table = list_calibrators(ra, dec)
-	fluxes = sorted(table['NVSS']['flux'])
-	print("Brightest source flux: {0}. Total flux {1}".format(max(fluxes), sum(fluxes)))
-
-
-def list_calibrators(ra, dec, surveys=["NVSS"], radius=2.):
+def list_calibrators(ra, dec, surveys=["NVSS"], radius=_beamradius_DSA):
     """ Search surveys for sources near (ra, dec)
     Args:
         ra, dec: float
@@ -56,12 +56,14 @@ def list_calibrators(ra, dec, surveys=["NVSS"], radius=2.):
             else:
                 cols_keep = ['NAME', 'ra', 'dec', 'separation']
             tables[survey] = cat[cols_keep]
+        else:
+            tables[survey] = None
 
     # TODO: select based on source size
     return tables
 
 
-def query_heasarc(coord=None, ra=None, dec=None, mission='NVSS', radius=2*units.deg):
+def query_heasarc(coord=None, ra=None, dec=None, mission='NVSS', radius=_beamradius_DSA*units.deg):
     """
     Use astroquery to query the HEARSARC database
 
