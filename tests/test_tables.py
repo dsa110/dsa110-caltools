@@ -18,7 +18,7 @@ def test_radius():
     table1 = caltools.list_calibrators(180., 40., surveys=["FIRST"], radius=1.)
     table2 = caltools.list_calibrators(180., 40., surveys=["FIRST"], radius=2.)
     print(table1, table2)
-    assert len(table2) > len(table1)
+    assert len(table2["FIRST"]) > len(table1["FIRST"])
     
 
 def test_getlist():

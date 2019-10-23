@@ -27,7 +27,8 @@ install:
   # install with conda and pip
   - conda create -n conda pip
   - source activate conda
-  - conda install -q python=$TRAVIS_PYTHON_VERSION numpy astropy pytest setuptools coverage astroquery
+  - conda install -q python=$TRAVIS_PYTHON_VERSION numpy astropy pytest setuptools coverage # astroquery
+  - pip install git+https://github.com/ellot/astroquery.git@patch-1  # temp fix for heasarc api change
   - python setup.py install
 
 before_script:
