@@ -33,25 +33,20 @@
   <div class="section" id="dsa110-caltools">
 <h1>dsa110-caltools<a class="headerlink" href="#dsa110-caltools" title="Permalink to this headline">¶</a></h1>
 <p>dsa110-caltools has a module to help find calibrators and create calibration models.</p>
-<span class="target" id="module-caltools.caltools"></span><dl class="function">
-<dt id="caltools.caltools.clean_heasarc">
-<code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">clean_heasarc</code><span class="sig-paren">(</span><em class="sig-param">catalog</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.clean_heasarc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renames columns</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="caltools.caltools.get_calibrator_lists">
-<code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">get_calibrator_lists</code><span class="sig-paren">(</span><em class="sig-param">ra</em>, <em class="sig-param">dec</em>, <em class="sig-param">fluxratio=0.7</em>, <em class="sig-param">survey='NVSS'</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.get_calibrator_lists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given ra,dec, define list of calibrator sources that includes fluxratio of the total flux in the field.
-Returns array of tuples (ra, dec, flux) to be used as input to models.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="caltools.caltools.is_field_calibratable">
-<code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">is_field_calibratable</code><span class="sig-paren">(</span><em class="sig-param">ra</em>, <em class="sig-param">dec</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.is_field_calibratable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given a ra, dec, compare brightest source to total flux.</p>
-</dd></dl>
-
+<p>It uses astroquery and NASA’s HEASARC service to create radio catalogs. The NVSS catalog is a good starting point for the DSA band near 1.4 GHz. The nominal DSA field of view is 2 degrees.</p>
+<p>Example usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="kn">from</span> <span class="nn">caltools</span> <span class="k">import</span> <span class="n">caltools</span>
+<span class="o">&gt;</span> <span class="n">tab</span> <span class="o">=</span> <span class="n">caltools</span><span class="o">.</span><span class="n">get_calibrator_lists</span><span class="p">(</span><span class="mf">202.78333</span><span class="p">,</span> <span class="mf">30.50889</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([(</span><span class="mf">202.78463</span><span class="p">,</span> <span class="mf">30.509</span>  <span class="p">,</span> <span class="mf">14902.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">201.56879</span><span class="p">,</span> <span class="mf">31.90269</span><span class="p">,</span>  <span class="mf">4861.9</span><span class="p">),</span>
+<span class="p">(</span><span class="mf">201.88213</span><span class="p">,</span> <span class="mf">31.85758</span><span class="p">,</span>  <span class="mf">1415.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">200.75971</span><span class="p">,</span> <span class="mf">29.69278</span><span class="p">,</span>  <span class="mf">1368.5</span><span class="p">),</span>
+<span class="p">(</span><span class="mf">202.47021</span><span class="p">,</span> <span class="mf">31.90322</span><span class="p">,</span>   <span class="mf">829.</span> <span class="p">),</span> <span class="p">(</span><span class="mf">202.1025</span> <span class="p">,</span> <span class="mf">30.74183</span><span class="p">,</span>   <span class="mf">595.7</span><span class="p">),</span>
+<span class="p">(</span><span class="mf">203.66</span>   <span class="p">,</span> <span class="mf">31.60764</span><span class="p">,</span>   <span class="mf">523.8</span><span class="p">)],</span>
+<span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;ra&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;f8&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;dec&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;f8&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;flux&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;f8&#39;</span><span class="p">)])</span>
+</pre></div>
+</div>
+<div class="section" id="useful-functions">
+<h2>Useful Functions<a class="headerlink" href="#useful-functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="caltools.caltools.list_calibrators">
 <code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">list_calibrators</code><span class="sig-paren">(</span><em class="sig-param">ra, dec, surveys=['NVSS'], radius=2.0</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.list_calibrators" title="Permalink to this definition">¶</a></dt>
@@ -67,6 +62,14 @@ Args:</p>
 </dd>
 </dl>
 </div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="caltools.caltools.get_calibrator_lists">
+<code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">get_calibrator_lists</code><span class="sig-paren">(</span><em class="sig-param">ra</em>, <em class="sig-param">dec</em>, <em class="sig-param">fluxratio=0.7</em>, <em class="sig-param">survey='NVSS'</em>, <em class="sig-param">radius=2.0</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.get_calibrator_lists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given ra,dec, define list of calibrator sources that includes fluxratio of the total flux in the field.
+Returns array of tuples (ra, dec, flux) to be used as input to models.
+Can optionally define survey and radius for catalog query.</p>
 </dd></dl>
 
 <dl class="function">
@@ -86,33 +89,10 @@ mission: str</p>
 <p>Returns:</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="caltools.caltools.sort_by_separation">
-<code class="sig-prename descclassname">caltools.caltools.</code><code class="sig-name descname">sort_by_separation</code><span class="sig-paren">(</span><em class="sig-param">catalog</em>, <em class="sig-param">coord</em>, <em class="sig-param">radec=('ra'</em>, <em class="sig-param">'dec')</em>, <em class="sig-param">add_sep=True</em><span class="sig-paren">)</span><a class="headerlink" href="#caltools.caltools.sort_by_separation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sort an input catalog by separation from input coordinate</p>
-<dl>
-<dt>Args:</dt><dd><p>catalog: astropy.table.Table
-coord: SkyCoord
-radec: tuple</p>
-<blockquote>
-<div><p>Defines catalog columns holding RA, DEC (in deg)</p>
-</div></blockquote>
-<dl class="simple">
-<dt>add_sep: bool, optional</dt><dd><p>Add a ‘separation’ column with units of arcmin</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><dl class="simple">
-<dt>srt_catalog: astropy.table.Table</dt><dd><p>Sorted catalog</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 </ul>
+</div>
 </div>
 
 
