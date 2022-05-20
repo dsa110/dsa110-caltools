@@ -232,13 +232,25 @@ class Image:
 
     def show(self):
         """Plot the image, and return ax for overplotting additional elements."""
-        fig, ax = plt.subplots(
+        self.fig, self.ax = plt.subplots(
             figsize=(16, 16),
             subplot_kw={'projection': self._wcs, 'slices': ('x', 'y', 0, 0)})
-        _im = ax.imshow(
+        _im = self.ax.imshow(
             self._data, interpolation='nearest', cmap='gray', origin='lower',
             vmin=self._datamean - self._datastd * 2, vmax=self._datamean + self._datastd*10)
-        return fig, ax
+        return self.fig, self.ax
+
+    def add_arrows(self, coords: SkyCoord, ra_offsets: List[float], dec_offsets: List[float], color='white'):
+        """ Add arrows at location coords with size ra/dec_offsets.
+        """
+
+        for (coord, ra_offset, dec_offset) in zip(coords, ra_offsets, dec_offsets):
+            x, y, *_ = self.wcs.world_to_pixel(coord, self.f0, self.p0)
+            if 0 <= x < self.data.shape[0] and  0 <= y < self.data.shape[1]:
+                e = Arrow(x=x, y=y, dx=-ra_offset*200, dy=dec_offset*200, width=200)
+                e.set_facecolor(color)
+                e.set_edgecolor(color)
+                self.ax.add_artist(e)
 
     @property
     def filepath(self) -> str:
@@ -376,13 +388,7 @@ def plot_offset_direction(
 ) -> Tuple["matplotlib.fig", "matplotlib.axes.Axes"]:
     """Plot measured offsets on an image."""
     fig, ax = dsaimage.show()
-    for (coord, ra_offset, dec_offset) in zip(coords, ra_offsets, dec_offsets):
-        x, y, *_ = dsaimage.wcs.world_to_pixel(coord, dsaimage.f0, dsaimage.p0)
-        if 0 <= x < dsaimage.data.shape[0] and  0 <= y < dsaimage.data.shape[1]:
-            e = Arrow(x=x, y=y, dx=-ra_offset*200, dy=dec_offset*200, width=200)
-            e.set_facecolor('white')
-            e.set_edgecolor('white')
-            ax.add_artist(e)
+    dsaimage.add_arrows(coords, ra_offsets, dec_offsets)
     return fig, ax
 
 def plot_matched_sources(
