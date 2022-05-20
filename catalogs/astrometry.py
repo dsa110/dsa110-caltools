@@ -208,6 +208,12 @@ class SourceCatalog:
         self._catalogpath = str(value)
         self._sources = None
 
+    @property
+    def skycoords(self) -> SkyCoord:
+        ras = self._sources["RA"].tolist()
+        decs = self._sources["DEC"].tolist()
+
+        return SkyCoord(ras, decs, unit='deg')
 
 class Image:
     """A radio image, stored in fits format."""
