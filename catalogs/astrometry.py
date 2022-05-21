@@ -89,7 +89,8 @@ class VLASSCat:
         if min_flux is not None:
             query_result = query_result & (self._catalog['Total_flux'] > min_flux)
 
-        return self._catalog[query_result]
+        print(f"Setting _catalog to subset based on search.")
+        self._catalog = self._catalog[query_result]
 
     @property
     def catalog(self) -> pandas.DataFrame:
@@ -346,7 +347,7 @@ def match_ps1(dsacat, ndet=2, radius=5/3600):
     """
 
     dra, ddec = [], []
-    co_match = []
+    sel = []
     for i, co in enumerate(dsacat):
         print(f'\nEntry {i}')
         res = psquery.cone_ps1(co, phot="PSF", table="mean", ndet=ndet, radius=radius)
@@ -359,14 +360,14 @@ def match_ps1(dsacat, ndet=2, radius=5/3600):
             _, ra, dec, *_ = data.split(",")
             dra.append((float(ra) - co.ra.value) * np.cos(np.radians(co.dec.value)) * 3600)
             ddec.append((float(dec) - co.dec.value) * 3600)
-            co_match.append(co)
+            sel.append(i)
         else:
             print("too many ps1 counterparts")
             continue
     print(f"Found {len(dra)} matches with a single PS1 ({ndet} detections) within {radius*3600} arcsec.")
     print(f"Delta (RA, Dec) offset and error: \n({np.mean(dra):0.2e}, {np.mean(ddec):0.2e}) +- ({1.48*stats.median_abs_deviation(dra):0.2e}, {1.48*stats.median_abs_deviation(ddec):0.2e})")
 
-    return co_match, dra, ddec
+    return sel, dra, ddec
 
 
 def plot_catalogs(
